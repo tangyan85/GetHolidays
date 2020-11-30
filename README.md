@@ -1,6 +1,6 @@
-# 获取中国大陆休假日
+# 获取中国休假日
 
-找了一圈GitHub，都没有发现自己需要的：需要将非工作日（包括节假日、周末（只要是周末，不管是否调休））与工作日区分开来，写入json文件，或者拼装sql文件
+找了一圈GitHub，都没有发现自己需要的：需要将非工作日（包括节假日（ day_type = 0）、周末（只要是周末，不管是否调休 day_type = 2））与工作日（ day_type = 1）区分开来，写入json文件，或者拼装sql文件
 
 通过爬取 [http://holidays-calendar.net](http://holidays-calendar.net/calendar_zh_cn/china_zh_cn.html) 网址获取公共假日
 
