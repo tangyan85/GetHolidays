@@ -11,7 +11,7 @@
 ```python
 
 index.py    是执行测试文件
-data.json   是抓取处理后的json文件（结果可以自己处理，具体见参考holidays.py的67行）
+data.json   是抓取处理后的2021年节假日json文件（结果可以自己处理，具体见参考holidays.py的67行）
 openday.sql 是拼装的sql文件
 
 
