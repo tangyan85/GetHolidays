@@ -1,7 +1,7 @@
 import holidays
 import json
 
-holidays.getYearHolidays('2021')
+days=holidays.getYearHolidays('2021')
 
 with open('data.json','r')as fp:
     json_data = json.load(fp)
@@ -21,4 +21,3 @@ for month in json_data:
         f.write('\n')
  # 文件写入内容
 f.close()
-#print(days);
