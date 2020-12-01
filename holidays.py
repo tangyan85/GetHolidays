@@ -39,8 +39,13 @@ def getYearHolidays(year=time.strftime("%Y"), lan="zh_cn"):
     html = getHtmlTxt(year, lan)
     if html is None:
         return
+    
+   
 
     soup = BeautifulSoup(html)
+    #获取调休上班的日期
+    noNeeddays=getWorkDay4Break(soup.find_all('div',class_="list-mark"),year)
+
     for table in soup.find_all('table'):
         #<tr><td class="month" colspan="7">Jan（1月）</td></tr>
         #Jan（1月）
@@ -73,18 +78,52 @@ def getYearHolidays(year=time.strftime("%Y"), lan="zh_cn"):
                 elif day in sun_list:
                    day_type = 2
                 day = "%s%s" % (month, day.zfill(2))
+
+                if day in noNeeddays:
+                    day_type = 2
+
                 months[day] = day_type
         data[month] = months
     
     with open('data.json', 'w') as f:
          json.dump(data, f)
-    return
+    return data
 
+#解析调休上班的日期
+    # []['2月7日（星期日）、2月20日（星期六）'] []
+    # ['4月25日（星期日）、5月8日（星期六）'][]
+    # ['9月18日（星期六）']['9月26日（星期日）、10月9日（星期六）']
+def getWorkDay4Break(htmlData,year=time.strftime("%Y")):
+    noWorkDays=[]
+    p0 = re.compile('【调休上班】(.+)上班。', re.S) 
+    for div in htmlData:
+        days_str=re.findall(p0, div.text)
+
+        if len(days_str)>0:
+            for word in days_str:
+                for tmp in word.split('、'):
+                    if len(tmp)>0:
+                       noWorkDays.append(getDay4Word(tmp,year))
+    return noWorkDays
+
+
+#input:4月25日（星期日）
+#output:"0425"
+def getDay4Word(word,year=time.strftime("%Y")):
+    if len(word)==0:return
+    #firstHalf=word[0:word.index('（')]
+    # endHalf=word[word.index('（')+1:word.index('）')]
+    # print(firstHalf)
+    # print(endHalf)
+    month=word[0:word.index('月')]
+    day=word[word.index('月')+1:word.index('日')]
+    # print(mouth)
+    # print(day)
+    return "%s%s%s" % (year,month.zfill(2), day.zfill(2))
 
 def getMonthHolidays(month=time.strftime("%Y%m"), lan="zh_cn"):
     year = month[0:4]
-    getYearHolidays(year, lan)
-
+    days = getYearHolidays(year, lan)
 
 
 
